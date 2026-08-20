@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Project portfolio of Prabin Bahadur Thapa, including Python and web development work.">
+  <title>Projects | Prabin Bahadur Thapa</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <script src="assets/js/theme.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/projects.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container header__inner">
+      <a class="site-brand" href="index.html" aria-label="Prabin Bahadur Thapa home page">PBT.</a>
+      <nav class="primary-navigation" id="primary-navigation" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="index.html">Home</a></li>
+          <li><a class="nav-link" href="about.html">About</a></li>
+          <li><a class="nav-link" href="experience.html">Experience</a></li>
+          <li><a class="nav-link" href="skills.html">Skills</a></li>
+          <li><a class="nav-link" href="projects.html" aria-current="page">Projects</a></li>
+          <li><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header__actions">
+        <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false"><span class="theme-toggle__icon" aria-hidden="true">◐</span><span class="visually-hidden">Toggle color theme</span></button>
+        <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false"><span aria-hidden="true">☰</span><span class="visually-hidden">Toggle navigation menu</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="page-intro section">
+      <div class="container">
+        <p class="eyebrow">Project portfolio</p>
+        <h1>Work built through learning and exploration.</h1>
+        <p>Project cards are ready for verified project information, screenshots, technologies, repositories, and live demonstrations.</p>
+      </div>
+    </section>
+
+    <section class="section section--alt" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Browse work</p>
+          <h2 id="projects-title">Projects</h2>
+          <p>Use a category or search term to narrow the project list.</p>
+        </div>
+
+        <div class="project-controls">
+          <div class="project-search">
+            <label class="visually-hidden" for="project-search">Search projects</label>
+            <input class="form-control" id="project-search" type="search" placeholder="Search projects" autocomplete="off">
+          </div>
+          <div class="project-filters" aria-label="Filter projects by category">
+            <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter-button" type="button" data-filter="python" aria-pressed="false">Python</button>
+            <button class="filter-button" type="button" data-filter="web" aria-pressed="false">Web</button>
+            <button class="filter-button" type="button" data-filter="full-stack" aria-pressed="false">Full Stack</button>
+            <button class="filter-button" type="button" data-filter="ai-ml" aria-pressed="false">AI/ML</button>
+            <button class="filter-button" type="button" data-filter="automation" aria-pressed="false">Automation</button>
+            <button class="filter-button" type="button" data-filter="database" aria-pressed="false">Database</button>
+            <button class="filter-button" type="button" data-filter="academic" aria-pressed="false">Academic</button>
+            <button class="filter-button" type="button" data-filter="other" aria-pressed="false">Other</button>
+          </div>
+        </div>
+
+        <p class="project-results" id="project-results" aria-live="polite">Showing 6 projects</p>
+
+        <div class="project-grid" id="project-grid">
+          <article class="card project-card" data-category="python automation" data-search="python project placeholder automation">
+            <div class="project-card__image" aria-hidden="true"><span>PY</span></div>
+            <div class="card__content">
+              <p class="project-card__category">Python · Automation</p>
+              <h3 class="card__title">[Python Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=python-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+
+          <article class="card project-card" data-category="web" data-search="web project placeholder">
+            <div class="project-card__image" aria-hidden="true"><span>WEB</span></div>
+            <div class="card__content">
+              <p class="project-card__category">Web Development</p>
+              <h3 class="card__title">[Web Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=web-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+
+          <article class="card project-card" data-category="full-stack database" data-search="full stack database project placeholder">
+            <div class="project-card__image" aria-hidden="true"><span>FS</span></div>
+            <div class="card__content">
+              <p class="project-card__category">Full Stack · Database</p>
+              <h3 class="card__title">[Full Stack Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=full-stack-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+
+          <article class="card project-card" data-category="ai-ml python" data-search="ai ml python project placeholder">
+            <div class="project-card__image" aria-hidden="true"><span>AI</span></div>
+            <div class="card__content">
+              <p class="project-card__category">AI/ML · Python</p>
+              <h3 class="card__title">[AI/ML Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=ai-ml-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+
+          <article class="card project-card" data-category="academic" data-search="academic project placeholder">
+            <div class="project-card__image" aria-hidden="true"><span>EDU</span></div>
+            <div class="card__content">
+              <p class="project-card__category">Academic</p>
+              <h3 class="card__title">[Academic Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=academic-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+
+          <article class="card project-card" data-category="other" data-search="other project placeholder">
+            <div class="project-card__image" aria-hidden="true"><span>06</span></div>
+            <div class="card__content">
+              <p class="project-card__category">Other</p>
+              <h3 class="card__title">[Project Name]</h3>
+              <p>[Project description]</p>
+              <div class="project-card__technologies"><span class="badge">[Technology]</span><span class="badge">[Technology]</span></div>
+              <div class="project-card__actions"><span class="button button--text" aria-disabled="true">GitHub [To be added]</span><span class="button button--text" aria-disabled="true">Live Demo [To be added]</span><a class="button button--text" href="project.html?slug=other-project">View Details <span aria-hidden="true">→</span></a></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="project-empty-state" id="project-empty-state" hidden>
+          <h3>No projects match that search.</h3>
+          <p>Try another keyword or choose a different category.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div><p class="footer__title">Prabin Bahadur Thapa</p><p class="footer__description">BIT student and technology enthusiast building thoughtful web and Python projects.</p></div>
+      <nav class="footer__nav" aria-label="Footer navigation"><a href="privacy-policy.html">Privacy Policy</a><a href="cookie-policy.html">Cookie Policy</a><span class="text-muted">Social links and CV: [To be added]</span></nav>
+      <div class="footer__bottom"><span>© <span id="current-year">2026</span> Prabin Bahadur Thapa</span><span>Built with HTML, CSS, and JavaScript.</span></div>
+    </div>
+  </footer>
+</body>
+</html>
