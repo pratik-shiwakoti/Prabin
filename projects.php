@@ -1,80 +1,128 @@
 <?php
 
-require_once __DIR__ . '/includes/database.php';
-require_once __DIR__ . '/includes/projects.php';
+require_once __DIR__ . '/functions.php';
 
-$pageTitle = 'Projects | Prabin Bahadur Thapa';
-$pageDescription = 'Project portfolio of Prabin Bahadur Thapa, including Python and web development work.';
-$activePage = 'projects';
-$projects = [];
-$categories = [];
-$isDatabaseAvailable = true;
+/**
+ * Fetches published projects for a future dynamic project listing.
+ * The Phase 6 HTML project list remains static until Phase 9.
+ */
+function getPublishedProjects(PDO $database, ?int $limit = null): array
+{
+    $sql = 'SELECT
+                projects.id,
+                projects.title,
+                projects.slug,
+                projects.short_description,
+                projects.cover_image,
+                project_categories.name AS category_name,
+                project_categories.slug AS category_slug,
+                projects.is_featured
+            FROM projects
+            LEFT JOIN project_categories ON project_categories.id = projects.category_id
+            WHERE projects.is_published = 1
+            ORDER BY projects.is_featured DESC, projects.created_at DESC';
 
-try {
-    $database = getDatabaseConnection();
-    $projects = getPublishedProjects($database);
-    $categories = getPublishedProjectCategories($database);
-} catch (Throwable $exception) {
-    $isDatabaseAvailable = false;
+    if ($limit !== null) {
+        $sql .= ' LIMIT :limit';
+    }
+
+    $statement = $database->prepare($sql);
+
+    if ($limit !== null) {
+        $statement->bindValue(':limit', max(1, $limit), PDO::PARAM_INT);
+    }
+
+    $statement->execute();
+
+    return $statement->fetchAll();
 }
 
-require __DIR__ . '/includes/header.php';
-?>
-  <main id="main-content" tabindex="-1">
-    <section class="page-intro section">
-      <div class="container">
-        <p class="eyebrow">Project portfolio</p>
-        <h1>Work built through learning and exploration.</h1>
-        <p>Browse published projects by category or search for a technology or keyword.</p>
-      </div>
-    </section>
+/** Fetches one published project by its public slug. */
+function getPublishedProjectBySlug(PDO $database, string $slug): ?array
+{
+    if (!isValidSlug($slug)) {
+        return null;
+    }
 
-    <section class="section section--alt" aria-labelledby="projects-title">
-      <div class="container">
-        <div class="section-title"><p class="eyebrow">Browse work</p><h2 id="projects-title">Projects</h2></div>
+    $statement = $database->prepare(
+        'SELECT
+            projects.*,
+            project_categories.name AS category_name,
+            project_categories.slug AS category_slug
+        FROM projects
+        LEFT JOIN project_categories ON project_categories.id = projects.category_id
+        WHERE projects.slug = :slug AND projects.is_published = 1
+        LIMIT 1'
+    );
+    $statement->execute(['slug' => $slug]);
+    $project = $statement->fetch();
 
-        <?php if (!$isDatabaseAvailable): ?>
-          <div class="project-empty-state"><h3>Projects are temporarily unavailable.</h3><p>Please check the local database configuration and import the database schema.</p></div>
-        <?php elseif (!$projects): ?>
-          <div class="project-empty-state"><h3>No published projects yet.</h3><p>Published projects will appear here once they have been added to the portfolio.</p></div>
-        <?php else: ?>
-          <div class="project-controls">
-            <div class="project-search"><label class="visually-hidden" for="project-search">Search projects</label><input class="form-control" id="project-search" type="search" placeholder="Search projects" autocomplete="off"></div>
-            <div class="project-filters" aria-label="Filter projects by category">
-              <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
-              <?php foreach ($categories as $category): ?>
-                <button class="filter-button" type="button" data-filter="<?= e($category['slug']) ?>" aria-pressed="false"><?= e($category['name']) ?></button>
-              <?php endforeach; ?>
-            </div>
-          </div>
-          <p class="project-results" id="project-results" aria-live="polite">Showing <?= count($projects) ?> projects</p>
-          <div class="project-grid" id="project-grid">
-            <?php foreach ($projects as $project): ?>
-              <?php $technologies = getProjectTechnologies($database, (int) $project['id']); ?>
-              <article class="card project-card" data-category="<?= e($project['category_slug'] ?? 'other') ?>" data-search="<?= e(strtolower($project['title'] . ' ' . $project['short_description'] . ' ' . implode(' ', $technologies))) ?>">
-                <?php if (!empty($project['cover_image'])): ?>
-                  <img class="project-card__cover" src="<?= e($project['cover_image']) ?>" alt="<?= e($project['title']) ?> project cover" loading="lazy">
-                <?php else: ?>
-                  <div class="project-card__image" aria-hidden="true"><span><?= e(strtoupper(substr($project['title'], 0, 2))) ?></span></div>
-                <?php endif; ?>
-                <div class="card__content">
-                  <p class="project-card__category"><?= e($project['category_name'] ?? 'Other') ?></p>
-                  <h3 class="card__title"><?= e($project['title']) ?></h3>
-                  <p><?= e($project['short_description']) ?></p>
-                  <?php if ($technologies): ?><div class="project-card__technologies"><?php foreach ($technologies as $technology): ?><span class="badge"><?= e($technology) ?></span><?php endforeach; ?></div><?php endif; ?>
-                  <div class="project-card__actions">
-                    <?php if (!empty($project['github_url'])): ?><a class="button button--text" href="<?= e($project['github_url']) ?>" target="_blank" rel="noopener noreferrer">GitHub</a><?php endif; ?>
-                    <?php if (!empty($project['demo_url'])): ?><a class="button button--text" href="<?= e($project['demo_url']) ?>" target="_blank" rel="noopener noreferrer">Live Demo</a><?php endif; ?>
-                    <a class="button button--text" href="project.php?slug=<?= rawurlencode($project['slug']) ?>">View Details <span aria-hidden="true">→</span></a>
-                  </div>
-                </div>
-              </article>
-            <?php endforeach; ?>
-          </div>
-          <div class="project-empty-state" id="project-empty-state" hidden><h3>No projects match that search.</h3><p>Try another keyword or choose a different category.</p></div>
-        <?php endif; ?>
-      </div>
-    </section>
-  </main>
-  <script src="assets/js/projects.js" defer></script>
-<?php require __DIR__ . '/includes/footer.php'; ?>
+    return $project ?: null;
+}
+
+/** Returns the categories that have at least one published project. */
+function getPublishedProjectCategories(PDO $database): array
+{
+    $statement = $database->query(
+        'SELECT project_categories.id, project_categories.name, project_categories.slug
+        FROM project_categories
+        INNER JOIN projects ON projects.category_id = project_categories.id
+        WHERE projects.is_published = 1
+        GROUP BY project_categories.id, project_categories.name, project_categories.slug, project_categories.sort_order
+        ORDER BY project_categories.sort_order ASC, project_categories.name ASC'
+    );
+
+    return $statement->fetchAll();
+}
+
+/** Returns ordered technology names for one project. */
+function getProjectTechnologies(PDO $database, int $projectId): array
+{
+    $statement = $database->prepare(
+        'SELECT technology_name
+        FROM project_technologies
+        WHERE project_id = :project_id
+        ORDER BY sort_order ASC, technology_name ASC'
+    );
+    $statement->execute(['project_id' => $projectId]);
+
+    return $statement->fetchAll(PDO::FETCH_COLUMN);
+}
+
+/** Returns ordered screenshots for one project. */
+function getProjectImages(PDO $database, int $projectId): array
+{
+    $statement = $database->prepare(
+        'SELECT image_path, alt_text
+        FROM project_images
+        WHERE project_id = :project_id
+        ORDER BY is_cover DESC, sort_order ASC, id ASC'
+    );
+    $statement->execute(['project_id' => $projectId]);
+
+    return $statement->fetchAll();
+}
+
+/** Returns up to three published projects in the same category. */
+function getRelatedProjects(PDO $database, int $projectId, ?int $categoryId): array
+{
+    if ($categoryId === null) {
+        return [];
+    }
+
+    $statement = $database->prepare(
+        'SELECT id, title, slug, short_description, cover_image
+        FROM projects
+        WHERE is_published = 1
+          AND category_id = :category_id
+          AND id != :project_id
+        ORDER BY is_featured DESC, created_at DESC
+        LIMIT 3'
+    );
+    $statement->execute([
+        'category_id' => $categoryId,
+        'project_id' => $projectId,
+    ]);
+
+    return $statement->fetchAll();
+}
